@@ -31,39 +31,71 @@ namespace Util
 
         private void Update()
         {
-            if (Input.touchCount <= 0)
-                return;
-
+            Debug.Log($"Update: {_isBlocked}");
             if (_isBlocked)
                 return;
 
+#if UNITY_EDITOR
+            Vector2 screenPos = Input.mousePosition;
+            if (Input.GetMouseButtonDown(0))
+            {
+                OnTouchBegan(screenPos);
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                OnTouchMoved(screenPos);
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                OnTouchEnded(screenPos);
+            }
+#else
+            if (Input.touchCount <= 0)
+                return;
+            
             var input = Input.GetTouch(0);
             Vector2 screenPos = input.position;
 
             if (input.phase == TouchPhase.Began)
             {
-                _initPosition = screenPos;
-                XY = screenPos;
-                OnDragging?.Invoke(true);
+                OnTouchBegan(screenPos);
             }
             else if (input.phase == TouchPhase.Moved || input.phase == TouchPhase.Stationary)
             {
-                Vector2 direction = screenPos - (Vector2)_initPosition;
-                float dist = direction.magnitude;
-
-                if (dist > DRAG_RANGE)
-                {
-                    XY = (Vector2)_initPosition + direction.normalized * DRAG_RANGE;
-                }
-                else
-                {
-                    XY = screenPos;
-                }
+                OnTouchMoved(screenPos);
             }
-            else if (input.phase == TouchPhase.Ended)
+            else if (input.phase == TouchPhase.Ended || input.phas == TouchPhase.Canceled)
             {
-                OnDragging?.Invoke(false);
+                OnTouchEnded(screenPos);
             }
+#endif
+        }
+
+        private void OnTouchBegan(Vector2 screenPos)
+        {
+            _initPosition = screenPos;
+            XY = screenPos;
+            OnDragging?.Invoke(true);
+        }
+
+        private void OnTouchMoved(Vector2 screenPos)
+        {
+            Vector2 direction = screenPos - (Vector2)_initPosition;
+            float dist = direction.magnitude;
+
+            if (dist > DRAG_RANGE)
+            {
+                XY = (Vector2)_initPosition + direction.normalized * DRAG_RANGE;
+            }
+            else
+            {
+                XY = screenPos;
+            }
+        }
+
+        private void OnTouchEnded(Vector2 screenPos)
+        {
+            OnDragging?.Invoke(false);
         }
         
         public static void BlockInput(bool isBlocked) => Instance._isBlocked = isBlocked;
