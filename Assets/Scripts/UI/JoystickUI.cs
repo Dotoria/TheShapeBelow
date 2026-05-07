@@ -11,13 +11,15 @@ namespace UI
 
         private void Start()
         {
+            _outerCircle.gameObject.SetActive(false);
+            _innerCircle.gameObject.SetActive(false);
+            
             InputManager.BlockInput(false);
             InputManager.OnDragging += HandleDragging;
         }
         
         private void HandleDragging(bool isDragging)
         {
-            Debug.Log($"Drag: {isDragging}");
             _outerCircle.gameObject.SetActive(isDragging);
             _innerCircle.gameObject.SetActive(isDragging);
 

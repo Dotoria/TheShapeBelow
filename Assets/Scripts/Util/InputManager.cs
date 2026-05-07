@@ -9,11 +9,12 @@ namespace Util
         
         public static Action<bool> OnDragging;
         public static Vector2 XY;
+        public static Vector2 Delta;
         
         private Vector3 _initPosition;
         private bool _isBlocked;
 
-        private const float DRAG_RANGE = 5f;
+        private const float DRAG_RANGE = 50f;
 
         private static InputManager Instance
         {
@@ -31,7 +32,6 @@ namespace Util
 
         private void Update()
         {
-            Debug.Log($"Update: {_isBlocked}");
             if (_isBlocked)
                 return;
 
@@ -75,17 +75,18 @@ namespace Util
         {
             _initPosition = screenPos;
             XY = screenPos;
+            Delta = Vector2.zero;
             OnDragging?.Invoke(true);
         }
 
         private void OnTouchMoved(Vector2 screenPos)
         {
-            Vector2 direction = screenPos - (Vector2)_initPosition;
-            float dist = direction.magnitude;
+            Delta = screenPos - (Vector2)_initPosition;
+            float dist = Delta.magnitude;
 
             if (dist > DRAG_RANGE)
             {
-                XY = (Vector2)_initPosition + direction.normalized * DRAG_RANGE;
+                XY = (Vector2)_initPosition + Delta.normalized * DRAG_RANGE;
             }
             else
             {
@@ -96,6 +97,8 @@ namespace Util
         private void OnTouchEnded(Vector2 screenPos)
         {
             OnDragging?.Invoke(false);
+            XY = Vector2.zero;
+            Delta = Vector2.zero;
         }
         
         public static void BlockInput(bool isBlocked) => Instance._isBlocked = isBlocked;

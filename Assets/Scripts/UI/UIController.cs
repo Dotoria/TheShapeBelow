@@ -1,6 +1,8 @@
+using UnityEngine;
+
 namespace UI
 {
-    public class UIController
+    public class UIController : MonoBehaviour
     {
         
     }

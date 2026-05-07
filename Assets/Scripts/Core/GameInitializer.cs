@@ -13,6 +13,7 @@ namespace Core
 
         private void Start()
         {
+            _player.Initialize();
         }
     }
 }
