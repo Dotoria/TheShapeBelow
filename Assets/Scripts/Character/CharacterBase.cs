@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Character
 {
-    public abstract class CharacterBase : MonoBehaviour, IPoolable
+    public abstract class CharacterBase : MonoBehaviour
     {
         [SerializeField] private float _moveSpeed = 5f;
         [SerializeField] private float _smoothTime = 0.5f;

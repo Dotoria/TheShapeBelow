@@ -13,9 +13,7 @@ namespace Character
             Tanker
         }
 
-        [SerializeField] private EFriendType _friendType;
-        public EFriendType FriendType => _friendType;
-
+        public EFriendType FriendType { get; private set; }
         public float MaxHp { get; private set; }
         public float CurrentHp { get; private set; }
         public float MoveSpeed { get; private set; }
@@ -27,8 +25,7 @@ namespace Character
 
         public void Initialize(CharacterData<Friend, EFriendType> config)
         {
-            _friendType = config.characterType;
-
+            FriendType = config.characterType;
             MaxHp = config.maxHp;
             MoveSpeed = config.moveSpeed;
             AttackPower = config.attackPower;

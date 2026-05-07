@@ -10,9 +10,7 @@ namespace Character
             Default,
         }
 
-        [SerializeField] private EEnemyType _enemyType;
-        public EEnemyType EnemyType => _enemyType;
-
+        public EEnemyType EnemyType { get; private set; }
         public float MaxHp { get; private set; }
         public float CurrentHp { get; private set; }
         public float MoveSpeed { get; private set; }
@@ -24,8 +22,7 @@ namespace Character
 
         public void Initialize(CharacterData<Enemy, EEnemyType> config)
         {
-            _enemyType = config.characterType;
-
+            EnemyType = config.characterType;
             MaxHp = config.maxHp;
             MoveSpeed = config.moveSpeed;
             AttackPower = config.attackPower;
