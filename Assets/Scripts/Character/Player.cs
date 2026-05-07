@@ -3,17 +3,18 @@ using Util;
 
 namespace Character
 {
-    public class Player : MonoBehaviour
+    public class Player : CharacterBase
     {
-        [SerializeField] private float _moveSpeed = 5f;
-        [SerializeField] private float _smoothTime = 0.5f;
-        [SerializeField] private float _turnSpeed = 720f;
-        
-        private Movement _movement;
-
-        public void Initialize()
+        protected override void SetDefaultValues()
         {
-            _movement = new Movement(transform, _moveSpeed, _smoothTime, _turnSpeed);
+        }
+        
+        public override void OnSpawned()
+        {
+        }
+        
+        public override void OnDespawned()
+        {
         }
         
         private void Update()
