@@ -18,7 +18,5 @@ namespace Character
         }
 
         protected abstract void SetDefaultValues();
-        public abstract void OnSpawned();
-        public abstract void OnDespawned();
     }
 }

@@ -9,5 +9,7 @@ namespace Battle
         float AttackRange { get; }
         float AttackCooldown { get; }
         bool IsDead { get; }
+        
+        IBattleUnit FindTarget(IBattleUnit self);
     }
 }

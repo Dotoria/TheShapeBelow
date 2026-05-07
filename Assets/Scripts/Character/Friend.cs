@@ -22,6 +22,7 @@ namespace Character
         public float AttackCooldown { get; private set; }
 
         public bool IsDead => CurrentHp <= 0f;
+        private BattleUnitStateMachine _stateMachine;
 
         public void Initialize(CharacterData<Friend, EFriendType> config)
         {
@@ -39,15 +40,32 @@ namespace Character
         {
         }
 
-        public override void OnSpawned()
+        public void OnSpawned()
         {
             CurrentHp = MaxHp;
             gameObject.SetActive(true);
+            
+            if (null == _stateMachine)
+                _stateMachine = new BattleUnitStateMachine(this);
+            _stateMachine.ChangeState(BattleUnitStateMachine.EBattleUnitState.Idle);
         }
 
-        public override void OnDespawned()
+        public void OnDespawned()
         {
             gameObject.SetActive(false);
+        }
+        
+        public IBattleUnit FindTarget(IBattleUnit self)
+        {
+            return null;
+        }
+        
+        private void Update()
+        {
+            if (null == _stateMachine)
+                return;
+            
+            _stateMachine.Update();
         }
     }
 }

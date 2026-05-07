@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Battle;
 using UnityEngine;
 using Util;
 
@@ -30,15 +31,15 @@ namespace Character
             _poolMap = new Dictionary<TType, ObjectPool<TCharacter>>();
             _poolRoot = new GameObject($"{typeof(TCharacter).Name}PoolRoot");
             
-            if (parent != null)
+            if (null != parent)
                 _poolRoot.transform.SetParent(parent);
 
             foreach (var entry in _entries)
             {
-                if (entry == null)
+                if (null == entry)
                     continue;
 
-                if (entry.prefab == null)
+                if (null == entry.prefab)
                 {
                     Debug.LogWarning($"Prefab is null: {entry.characterType}");
                     continue;
@@ -62,7 +63,7 @@ namespace Character
 
         public TCharacter Spawn(TType characterType, Vector3 position)
         {
-            if (_poolMap == null)
+            if (null == _poolMap)
             {
                 Debug.LogError("Pools are not initialized. Call InitializePools() first.");
                 return null;
@@ -75,50 +76,50 @@ namespace Character
             }
 
             CharacterData<TCharacter, TType> config = Get(characterType);
-            if (config == null)
+            if (null == config)
                 return null;
 
             TCharacter character = pool.Get();
             character.transform.position = position;
 
             ApplyConfig(character, config);
-            character.OnSpawned();
-
+            if (character is IPoolable poolable)
+                poolable.OnSpawned();
+            
             return character;
         }
 
         public void Despawn(TCharacter character, TType characterType)
         {
-            if (character == null)
+            if (null == character)
                 return;
 
-            if (_poolMap == null)
+            if (null == _poolMap)
             {
-                Debug.LogError("Pools are not initialized.");
                 Destroy(character.gameObject);
                 return;
             }
 
             if (!_poolMap.TryGetValue(characterType, out ObjectPool<TCharacter> pool))
             {
-                Debug.LogError($"Pool not found: {characterType}");
                 Destroy(character.gameObject);
                 return;
             }
 
-            character.OnDespawned();
+            if (character is IPoolable poolable)
+                poolable.OnDespawned();
+            
             pool.Release(character);
         }
 
         public CharacterData<TCharacter, TType> Get(TType characterType)
         {
-            if (_configMap == null)
+            if (null == _configMap)
                 BuildConfigMap();
 
             if (_configMap.TryGetValue(characterType, out var entry))
                 return entry;
 
-            Debug.LogError($"Config not found: {characterType}");
             return null;
         }
 
@@ -126,7 +127,7 @@ namespace Character
         {
             _poolMap = null;
 
-            if (_poolRoot != null)
+            if (null != _poolRoot)
             {
                 Destroy(_poolRoot);
                 _poolRoot = null;
@@ -139,7 +140,7 @@ namespace Character
 
             foreach (var entry in _entries)
             {
-                if (entry == null)
+                if (null == entry)
                     continue;
 
                 if (_configMap.ContainsKey(entry.characterType))

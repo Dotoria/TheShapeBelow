@@ -1,4 +1,4 @@
-namespace Battle
+namespace Character
 {
     public interface IPoolable
     {
