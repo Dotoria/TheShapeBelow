@@ -9,12 +9,11 @@ namespace UI
         [SerializeField] private Image _outerCircle;
         [SerializeField] private Image _innerCircle;
 
-        private void Start()
+        public void Initialize()
         {
             _outerCircle.gameObject.SetActive(false);
             _innerCircle.gameObject.SetActive(false);
             
-            InputManager.BlockInput(false);
             InputManager.OnDragging += HandleDragging;
         }
         
@@ -35,7 +34,6 @@ namespace UI
             if (_outerCircle.gameObject.activeSelf)
             {
                 _innerCircle.transform.position = InputManager.XY;
-                Vector2 delta = _innerCircle.rectTransform.anchoredPosition;
             }
         }
     }

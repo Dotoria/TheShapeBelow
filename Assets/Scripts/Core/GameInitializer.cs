@@ -15,6 +15,7 @@ namespace Core
 
         private void Start()
         {
+            _uiController.Initialize();
             _player.Initialize();
             _spawner.Initialize();
         }

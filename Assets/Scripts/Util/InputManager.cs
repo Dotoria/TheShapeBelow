@@ -9,10 +9,10 @@ namespace Util
         
         public static Action<bool> OnDragging;
         public static Vector2 XY;
-        public static Vector2 Delta;
+        public static Vector2 Delta = Vector2.zero;
         
         private Vector3 _initPosition;
-        private bool _isBlocked;
+        private bool _isBlocked = true;
 
         private const float DRAG_RANGE = 50f;
 
