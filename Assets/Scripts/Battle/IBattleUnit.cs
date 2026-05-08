@@ -1,3 +1,5 @@
+using Util;
+
 namespace Battle
 {
     public interface IBattleUnit
@@ -9,6 +11,8 @@ namespace Battle
         float AttackRange { get; }
         float AttackCooldown { get; }
         bool IsDead { get; }
+        
+        TriggerReceiver Trigger { get; }
         
         IBattleUnit FindTarget(IBattleUnit self);
     }

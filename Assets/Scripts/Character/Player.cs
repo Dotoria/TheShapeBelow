@@ -16,6 +16,19 @@ namespace Character
         
         protected override void SetDefaultValues()
         {
+            
+        }
+        
+        protected override void OnEntered(Collider other)
+        {
+            if (GetTarget(other, out var target))
+            {
+                Debug.Log("Player");
+            }
+        }
+        
+        protected override void OnExited(Collider other)
+        {
         }
         
         public void OnSpawned()

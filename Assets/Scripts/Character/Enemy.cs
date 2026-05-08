@@ -31,10 +31,22 @@ namespace Character
             AttackRange = config.attackRange;
             AttackCooldown = config.attackCooldown;
 
-            SetDefaultValues();
+            Initialize();
         }
 
         protected override void SetDefaultValues()
+        {
+        }
+        
+        protected override void OnEntered(Collider other)
+        {
+            if (GetTarget(other, out var target))
+            {
+                Debug.Log("Enemy");
+            }
+        }
+
+        protected override void OnExited(Collider other)
         {
         }
 
@@ -55,7 +67,6 @@ namespace Character
         
         public IBattleUnit FindTarget(IBattleUnit self)
         {
-            Debug.Log($"Find Target");
             return null;
         }
         

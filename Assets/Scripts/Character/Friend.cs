@@ -33,10 +33,18 @@ namespace Character
             AttackRange = config.attackRange;
             AttackCooldown = config.attackCooldown;
 
-            SetDefaultValues();
+            Initialize();
         }
 
         protected override void SetDefaultValues()
+        {
+        }
+        
+        protected override void OnEntered(Collider other)
+        {
+        }
+        
+        protected override void OnExited(Collider other)
         {
         }
 
