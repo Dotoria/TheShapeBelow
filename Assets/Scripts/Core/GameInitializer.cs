@@ -2,6 +2,7 @@ using Battle;
 using UnityEngine;
 using Character;
 using UI;
+using UnityEngine.Serialization;
 using Util;
 
 namespace Core
@@ -10,24 +11,12 @@ namespace Core
     {
         [SerializeField] private CameraController _cameraController;
         [SerializeField] private UIController _uiController;
-        [SerializeField] private Player _player;
-        [SerializeField] private CharacterSpawner _spawner;
+        [SerializeField] private BattleController _battleController;
 
         private void Start()
         {
             _uiController.Initialize();
-            _player.Initialize();
-            _spawner.Initialize();
+            _battleController.Initialize();
         }
-
-#if UNITY_EDITOR
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                _spawner.SpawnEnemy(Enemy.EEnemyType.Default, Vector3.zero);
-            }
-        }
-#endif
     }
 }

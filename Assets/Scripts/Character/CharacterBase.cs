@@ -40,15 +40,14 @@ namespace Character
                 return false;
 
             var rb = other.attachedRigidbody;
+            if (null == rb || !rb.TryGetComponent(out target))
+                return false;
 
             if (gameObject.layer == AllyLayer)
                 return rb.gameObject.layer == EnemyLayer;
 
             if (gameObject.layer == EnemyLayer)
                 return rb.gameObject.layer == AllyLayer;
-
-            if (rb != null && rb.TryGetComponent(out target))
-                return true;
             
             return false;
         }

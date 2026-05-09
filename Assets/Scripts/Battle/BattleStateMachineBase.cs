@@ -1,6 +1,9 @@
+using System.Collections.Generic;
+using Character;
+
 namespace Battle
 {
-    public class BattleUnitStateMachine
+    public abstract class BattleStateMachineBase
     {
         public enum EBattleUnitState
         {
@@ -10,14 +13,17 @@ namespace Battle
             Dead
         }
         
-        private readonly IBattleUnit _unit;
+        protected readonly IBattleUnit _unit;
+        protected readonly Movement _movement;
+        protected IReadOnlyList<IBattleUnit> _target;
         private EBattleUnitState _currentState;
 
         public EBattleUnitState CurrentState => _currentState;
 
-        public BattleUnitStateMachine(IBattleUnit unit)
+        public BattleStateMachineBase(IBattleUnit unit, Movement movement)
         {
             _unit = unit;
+            _movement = movement;
         }
 
         public void ChangeState(EBattleUnitState nextState)
@@ -33,21 +39,26 @@ namespace Battle
             switch (_currentState)
             {
                 case EBattleUnitState.Idle:
-                    IBattleUnit target = _unit.FindTarget(_unit);
+                    Idle();
                     break;
 
                 case EBattleUnitState.Move:
-                    // 타겟 방향 이동
+                    Move();
                     break;
 
                 case EBattleUnitState.Attack:
-                    // 공격 처리
+                    Attack();
                     break;
 
                 case EBattleUnitState.Dead:
-                    // 사망 처리
+                    Dead();
                     break;
             }
         }
+
+        protected abstract void Idle();
+        protected abstract void Move();
+        protected abstract void Attack();
+        protected abstract void Dead();
     }
 }

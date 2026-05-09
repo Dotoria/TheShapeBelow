@@ -1,9 +1,12 @@
+using System.Collections.Generic;
+using UnityEngine;
 using Util;
 
 namespace Battle
 {
     public interface IBattleUnit
     {
+        Vector3 Position { get; }
         float MaxHp { get; }
         float CurrentHp { get; }
         float MoveSpeed { get; }
@@ -14,6 +17,8 @@ namespace Battle
         
         TriggerReceiver Trigger { get; }
         
-        IBattleUnit FindTarget(IBattleUnit self);
+        IReadOnlyList<IBattleUnit> FindTarget();
+        void Attack();
+        void TakeDamage(float damage);
     }
 }

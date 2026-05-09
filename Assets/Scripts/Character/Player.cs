@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Battle;
 using UnityEngine;
 using Util;
@@ -6,13 +7,14 @@ namespace Character
 {
     public class Player : CharacterBase, IBattleUnit
     {
-        public float MaxHp { get; }
-        public float CurrentHp { get; }
-        public float MoveSpeed { get; }
-        public float AttackPower { get; }
-        public float AttackRange { get; }
-        public float AttackCooldown { get; }
-        public bool IsDead { get; }
+        public Vector3 Position => transform.position;
+        public float MaxHp { get; private set; }
+        public float CurrentHp { get; private set; }
+        public float MoveSpeed { get; private set; }
+        public float AttackPower { get; private set; }
+        public float AttackRange { get; private set; }
+        public float AttackCooldown { get; private set; }
+        public bool IsDead => CurrentHp <= 0f;
         
         protected override void SetDefaultValues()
         {
@@ -39,9 +41,22 @@ namespace Character
         {
         }
         
-        public IBattleUnit FindTarget(IBattleUnit self)
+        public IReadOnlyList<IBattleUnit> FindTarget()
         {
             return null;
+        }
+        
+        public void Attack()
+        {
+        }
+        
+        public void TakeDamage(float damage)
+        {
+            CurrentHp -= damage;
+            if (IsDead)
+            {
+                Debug.Log("Player is Dead");
+            }
         }
         
         private void Update()

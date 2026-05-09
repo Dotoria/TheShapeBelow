@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Battle;
 using UnityEngine;
 
@@ -14,15 +15,16 @@ namespace Character
         }
 
         public EFriendType FriendType { get; private set; }
+        public Vector3 Position => transform.position;
         public float MaxHp { get; private set; }
         public float CurrentHp { get; private set; }
         public float MoveSpeed { get; private set; }
         public float AttackPower { get; private set; }
         public float AttackRange { get; private set; }
         public float AttackCooldown { get; private set; }
-
         public bool IsDead => CurrentHp <= 0f;
-        private BattleUnitStateMachine _stateMachine;
+        
+        private BattleStateMachineBase _stateMachineBase;
 
         public void Initialize(CharacterData<Friend, EFriendType> config)
         {
@@ -53,9 +55,9 @@ namespace Character
             CurrentHp = MaxHp;
             gameObject.SetActive(true);
             
-            if (null == _stateMachine)
-                _stateMachine = new BattleUnitStateMachine(this);
-            _stateMachine.ChangeState(BattleUnitStateMachine.EBattleUnitState.Idle);
+            if (null == _stateMachineBase)
+                _stateMachineBase = new FriendStateMachine(this, _movement);
+            _stateMachineBase.ChangeState(BattleStateMachineBase.EBattleUnitState.Idle);
         }
 
         public void OnDespawned()
@@ -63,17 +65,31 @@ namespace Character
             gameObject.SetActive(false);
         }
         
-        public IBattleUnit FindTarget(IBattleUnit self)
+        public IReadOnlyList<IBattleUnit> FindTarget()
         {
             return null;
         }
         
+        public void Attack()
+        {
+        }
+        
+        public void TakeDamage(float damage)
+        {
+            CurrentHp -= damage;
+            if (CurrentHp <= 0f)
+            {
+                CurrentHp = 0f;
+                OnDespawned();
+            }
+        }
+        
         private void Update()
         {
-            if (null == _stateMachine)
+            if (null == _stateMachineBase)
                 return;
             
-            _stateMachine.Update();
+            _stateMachineBase.Update();
         }
     }
 }
