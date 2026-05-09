@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Battle;
 using UnityEngine;
 using Util;
@@ -11,29 +12,52 @@ namespace Character
         [SerializeField] private float _turnSpeed = 720f;
         [SerializeField] private TriggerReceiver _trigger;
         
-        private int AllyLayer;
-        private int EnemyLayer;
+        private bool _initialized = false;
+        
+        private static int AllyLayer;
+        private static int EnemyLayer;
         
         protected Movement _movement;
-        public TriggerReceiver Trigger { get; private set; }
+        private List<IBattleUnit> _targetsInRange = new List<IBattleUnit>();
+        public Vector3 Position => transform.position;
 
         public void Initialize()
         {
+            if (_initialized)
+                return;
+            
+            _initialized = true;
             AllyLayer = LayerMask.NameToLayer("Ally");
             EnemyLayer = LayerMask.NameToLayer("Opponent");
             _movement = new Movement(transform, _moveSpeed, _smoothTime, _turnSpeed);
-            Trigger = _trigger;
-            Trigger.Activate();
-            Trigger.OnTriggerEntered += OnEntered;
-            Trigger.OnTriggerExited += OnExited;
+            
+            _trigger.Activate();
+            _trigger.OnTriggerEntered += OnEntered;
+            _trigger.OnTriggerExited += OnExited;
+            
             SetDefaultValues();
         }
 
         protected abstract void SetDefaultValues();
-        protected abstract void OnEntered(Collider other);
-        protected abstract void OnExited(Collider other);
 
-        protected bool GetTarget(Collider other, out IBattleUnit target)
+        private void OnEntered(Collider other)
+        {
+            if (!GetTarget(other, out var target))
+                return;
+            
+            if (!_targetsInRange.Contains(target))
+                _targetsInRange.Add(target);
+        }
+
+        private void OnExited(Collider other)
+        {
+            if (!GetTarget(other, out var target))
+                return;
+
+            _targetsInRange.Remove(target);
+        }
+
+        private bool GetTarget(Collider other, out IBattleUnit target)
         {
             target = null;
             if (null == other)
@@ -50,6 +74,20 @@ namespace Character
                 return rb.gameObject.layer == AllyLayer;
             
             return false;
+        }
+
+        public virtual IReadOnlyList<IBattleUnit> FindTarget()
+        {
+            _targetsInRange.RemoveAll(t => t == null || t.IsDead);
+
+            _targetsInRange.Sort((a, b) =>
+            {
+                float da = (a.Position - Position).sqrMagnitude;
+                float db = (b.Position - Position).sqrMagnitude;
+                return da.CompareTo(db);
+            });
+
+            return _targetsInRange;
         }
     }
 }

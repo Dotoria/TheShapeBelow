@@ -11,6 +11,10 @@ namespace Character
 
         private Vector2 _velocity;
         private Vector2 _currentVelocityRef;
+        
+        private const float MOVEMENT_THRESHOLD = 0.001f;
+        
+        public bool IsMoving => _velocity.sqrMagnitude > MOVEMENT_THRESHOLD;
 
         public Movement(Transform transform, float moveSpeed, float smoothTime, float turnSpeed)
         {
@@ -22,7 +26,7 @@ namespace Character
 
         public void Move(Vector2 direction)
         {
-            Vector2 inputDir = direction.sqrMagnitude > 0.001f
+            Vector2 inputDir = direction.sqrMagnitude > MOVEMENT_THRESHOLD
                 ? direction.normalized
                 : Vector2.zero;
 

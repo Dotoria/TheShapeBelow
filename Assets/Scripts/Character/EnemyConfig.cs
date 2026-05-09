@@ -10,7 +10,7 @@ namespace Character
             CharacterData<Enemy, Enemy.EEnemyType> config
         )
         {
-            enemy.Initialize(config);
+            enemy.ApplyConfig(config);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Character
             CharacterData<Friend, Friend.EFriendType> config
         )
         {
-            friend.Initialize(config);
+            friend.ApplyConfig(config);
         }
     }
 }

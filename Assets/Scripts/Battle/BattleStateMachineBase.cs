@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Character;
+using UnityEngine;
 
 namespace Battle
 {
@@ -16,11 +17,10 @@ namespace Battle
         protected readonly IBattleUnit _unit;
         protected readonly Movement _movement;
         protected IReadOnlyList<IBattleUnit> _target;
+        protected float _lastAttackTime;
         private EBattleUnitState _currentState;
 
-        public EBattleUnitState CurrentState => _currentState;
-
-        public BattleStateMachineBase(IBattleUnit unit, Movement movement)
+        protected BattleStateMachineBase(IBattleUnit unit, Movement movement)
         {
             _unit = unit;
             _movement = movement;
@@ -28,9 +28,6 @@ namespace Battle
 
         public void ChangeState(EBattleUnitState nextState)
         {
-            if (_currentState == nextState)
-                return;
-
             _currentState = nextState;
         }
 

@@ -15,7 +15,6 @@ namespace Character
         }
 
         public EFriendType FriendType { get; private set; }
-        public Vector3 Position => transform.position;
         public float MaxHp { get; private set; }
         public float CurrentHp { get; private set; }
         public float MoveSpeed { get; private set; }
@@ -24,9 +23,9 @@ namespace Character
         public float AttackCooldown { get; private set; }
         public bool IsDead => CurrentHp <= 0f;
         
-        private BattleStateMachineBase _stateMachineBase;
+        private BattleStateMachineBase _stateMachine;
 
-        public void Initialize(CharacterData<Friend, EFriendType> config)
+        public void ApplyConfig(CharacterData<Friend, EFriendType> config)
         {
             FriendType = config.characterType;
             MaxHp = config.maxHp;
@@ -34,40 +33,26 @@ namespace Character
             AttackPower = config.attackPower;
             AttackRange = config.attackRange;
             AttackCooldown = config.attackCooldown;
-
-            Initialize();
         }
 
         protected override void SetDefaultValues()
         {
         }
-        
-        protected override void OnEntered(Collider other)
-        {
-        }
-        
-        protected override void OnExited(Collider other)
-        {
-        }
 
         public void OnSpawned()
         {
+            Initialize();
             CurrentHp = MaxHp;
             gameObject.SetActive(true);
             
-            if (null == _stateMachineBase)
-                _stateMachineBase = new FriendStateMachine(this, _movement);
-            _stateMachineBase.ChangeState(BattleStateMachineBase.EBattleUnitState.Idle);
+            if (null == _stateMachine)
+                _stateMachine = new FriendStateMachine(this, _movement);
+            _stateMachine.ChangeState(BattleStateMachineBase.EBattleUnitState.Idle);
         }
 
         public void OnDespawned()
         {
             gameObject.SetActive(false);
-        }
-        
-        public IReadOnlyList<IBattleUnit> FindTarget()
-        {
-            return null;
         }
         
         public void Attack()
@@ -77,19 +62,14 @@ namespace Character
         public void TakeDamage(float damage)
         {
             CurrentHp -= damage;
-            if (CurrentHp <= 0f)
-            {
-                CurrentHp = 0f;
-                OnDespawned();
-            }
         }
         
         private void Update()
         {
-            if (null == _stateMachineBase)
+            if (null == _stateMachine)
                 return;
             
-            _stateMachineBase.Update();
+            _stateMachine.Update();
         }
     }
 }

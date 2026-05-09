@@ -15,8 +15,6 @@ namespace Battle
         float AttackCooldown { get; }
         bool IsDead { get; }
         
-        TriggerReceiver Trigger { get; }
-        
         IReadOnlyList<IBattleUnit> FindTarget();
         void Attack();
         void TakeDamage(float damage);

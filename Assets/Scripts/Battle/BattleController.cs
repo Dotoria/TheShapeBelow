@@ -8,6 +8,7 @@ namespace Battle
     {
         [SerializeField] private Player _player;
         [Header("Config")]
+        [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private EnemyConfig _enemyConfig;
         [SerializeField] private FriendConfig _friendConfig;
 
@@ -22,6 +23,7 @@ namespace Battle
         public void Initialize()
         {
             _instance = this;
+            _player.ApplyConfig(_playerConfig);
             _player.Initialize();
             _enemyConfig.InitializePools(transform);
             _friendConfig.InitializePools(transform);

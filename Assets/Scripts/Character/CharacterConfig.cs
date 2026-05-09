@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Battle;
 using UnityEngine;
 using Util;
 
@@ -16,13 +15,6 @@ namespace Character
         private Dictionary<TType, CharacterData<TCharacter, TType>> _configMap;
         private Dictionary<TType, ObjectPool<TCharacter>> _poolMap;
         private GameObject _poolRoot;
-
-        public IReadOnlyList<CharacterData<TCharacter, TType>> Entries => _entries;
-
-        public void Initialize()
-        {
-            BuildConfigMap();
-        }
 
         public void InitializePools(Transform parent = null)
         {
@@ -41,13 +33,11 @@ namespace Character
 
                 if (null == entry.prefab)
                 {
-                    Debug.LogWarning($"Prefab is null: {entry.characterType}");
                     continue;
                 }
 
                 if (_poolMap.ContainsKey(entry.characterType))
                 {
-                    Debug.LogWarning($"Duplicate pool type: {entry.characterType}");
                     continue;
                 }
 
@@ -65,13 +55,11 @@ namespace Character
         {
             if (null == _poolMap)
             {
-                Debug.LogError("Pools are not initialized. Call InitializePools() first.");
                 return null;
             }
 
             if (!_poolMap.TryGetValue(characterType, out ObjectPool<TCharacter> pool))
             {
-                Debug.LogError($"Pool not found: {characterType}");
                 return null;
             }
 
@@ -117,10 +105,7 @@ namespace Character
             if (null == _configMap)
                 BuildConfigMap();
 
-            if (_configMap.TryGetValue(characterType, out var entry))
-                return entry;
-
-            return null;
+            return _configMap.GetValueOrDefault(characterType);
         }
 
         public void ClearRuntimePools()
@@ -143,13 +128,10 @@ namespace Character
                 if (null == entry)
                     continue;
 
-                if (_configMap.ContainsKey(entry.characterType))
+                if (!_configMap.TryAdd(entry.characterType, entry))
                 {
-                    Debug.LogWarning($"Duplicate config type: {entry.characterType}");
                     continue;
                 }
-
-                _configMap.Add(entry.characterType, entry);
             }
         }
 

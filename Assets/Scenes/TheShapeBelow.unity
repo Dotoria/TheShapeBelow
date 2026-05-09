@@ -551,6 +551,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: 6512242386179612915}
+  _playerConfig: {fileID: 11400000, guid: 2e07e23d7d8754f46918cff8071913d0, type: 2}
   _enemyConfig: {fileID: 11400000, guid: e5f9f0c574bbac94d9fc85a0a0438832, type: 2}
   _friendConfig: {fileID: 11400000, guid: 5a3409d97b522dd4cbde21df7e9afac0, type: 2}
 --- !u!1 &1384685280

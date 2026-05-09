@@ -1,13 +1,9 @@
-using System.Collections.Generic;
 using Battle;
-using UnityEngine;
-using Util;
 
 namespace Character
 {
     public class Player : CharacterBase, IBattleUnit
     {
-        public Vector3 Position => transform.position;
         public float MaxHp { get; private set; }
         public float CurrentHp { get; private set; }
         public float MoveSpeed { get; private set; }
@@ -16,34 +12,25 @@ namespace Character
         public float AttackCooldown { get; private set; }
         public bool IsDead => CurrentHp <= 0f;
         
+        private BattleStateMachineBase _stateMachine;
+        
+        public void ApplyConfig(PlayerConfig config)
+        {
+            MaxHp = config.maxHp;
+            MoveSpeed = config.moveSpeed;
+            AttackPower = config.attackPower;
+            AttackRange = config.attackRange;
+            AttackCooldown = config.attackCooldown;
+        }
+        
         protected override void SetDefaultValues()
         {
+            CurrentHp = MaxHp;
             
-        }
-        
-        protected override void OnEntered(Collider other)
-        {
-            if (GetTarget(other, out var target))
-            {
-                Debug.Log("Player");
-            }
-        }
-        
-        protected override void OnExited(Collider other)
-        {
-        }
-        
-        public void OnSpawned()
-        {
-        }
-        
-        public void OnDespawned()
-        {
-        }
-        
-        public IReadOnlyList<IBattleUnit> FindTarget()
-        {
-            return null;
+            if (null == _stateMachine)
+                _stateMachine = new PlayerStateMachine(this, _movement);
+
+            _stateMachine.ChangeState(BattleStateMachineBase.EBattleUnitState.Idle);
         }
         
         public void Attack()
@@ -53,15 +40,14 @@ namespace Character
         public void TakeDamage(float damage)
         {
             CurrentHp -= damage;
-            if (IsDead)
-            {
-                Debug.Log("Player is Dead");
-            }
         }
-        
+
         private void Update()
         {
-            _movement.Move(InputManager.Delta);
+            if (null == _stateMachine)
+                return;
+            
+            _stateMachine.Update();
         }
     }
 }
