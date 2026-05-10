@@ -93,6 +93,9 @@ namespace Battle.AttackObject
             if (!GetTarget(other, out var target))
                 return;
             
+            if (target.IsDead)
+                return;
+            
             target.TakeDamage(Damage);
             _remainingHitCount--;
             if (_remainingHitCount <= 0)

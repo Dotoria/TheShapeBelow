@@ -565,6 +565,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1384685282}
   - component: {fileID: 1384685281}
+  - component: {fileID: 1384685283}
   m_Layer: 0
   m_Name: GameScene
   m_TagString: Untagged
@@ -605,6 +606,22 @@ Transform:
   - {fileID: 1350527533}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1384685283
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384685280}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53534336680344018608a6d33bd35b27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _phaseConfig: {fileID: 11400000, guid: 408e507129973424abd1beccd1c64181, type: 2}
+  _battleController: {fileID: 1350527534}
+  _enemySpawnPoints: []
+  _friendSpawnPoints: []
 --- !u!224 &1654096901 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 61001341251765011, guid: 26cec69544edaed4fb88694c2f3a6b7b, type: 3}
