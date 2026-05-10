@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Battle.AttackObject;
 using Character;
+using Onboarding;
 using UnityEngine;
 
 namespace Battle
@@ -44,6 +45,15 @@ namespace Battle
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SpawnEnemy(Enemy.EEnemyType.Default, Vector3.zero);
+            }
+
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                OnboardingManager.ShowArrow(_player.transform, _activeEnemies[0].transform);
+            }
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                OnboardingManager.HideArrow();
             }
         }
 #endif

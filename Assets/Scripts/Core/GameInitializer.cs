@@ -1,8 +1,7 @@
 using Battle;
 using UnityEngine;
-using Character;
+using Onboarding;
 using UI;
-using UnityEngine.Serialization;
 using Util;
 
 namespace Core
@@ -12,11 +11,14 @@ namespace Core
         [SerializeField] private CameraController _cameraController;
         [SerializeField] private UIController _uiController;
         [SerializeField] private BattleController _battleController;
+        [SerializeField] private Arrow _arrowPrefab;
 
         private void Start()
         {
             _uiController.Initialize();
             _battleController.Initialize();
+            
+            OnboardingManager.Initialize(_arrowPrefab);
         }
     }
 }
