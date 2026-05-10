@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Battle;
+using Core;
 using UnityEngine;
 using Util;
 
@@ -14,9 +15,6 @@ namespace Character
         
         private bool _initialized = false;
         
-        private static int AllyLayer;
-        private static int EnemyLayer;
-        
         protected Movement _movement;
         private List<IBattleUnit> _targetsInRange = new List<IBattleUnit>();
         public Vector3 Position => transform.position;
@@ -27,8 +25,6 @@ namespace Character
                 return;
             
             _initialized = true;
-            AllyLayer = LayerMask.NameToLayer("Ally");
-            EnemyLayer = LayerMask.NameToLayer("Opponent");
             _movement = new Movement(transform, _moveSpeed, _smoothTime, _turnSpeed);
             
             _trigger.Activate();
@@ -67,11 +63,11 @@ namespace Character
             if (null == rb || !rb.TryGetComponent(out target))
                 return false;
 
-            if (gameObject.layer == AllyLayer)
-                return rb.gameObject.layer == EnemyLayer;
+            if (gameObject.layer == GameConfig.AllyLayer)
+                return rb.gameObject.layer == GameConfig.EnemyLayer;
 
-            if (gameObject.layer == EnemyLayer)
-                return rb.gameObject.layer == AllyLayer;
+            if (gameObject.layer == GameConfig.EnemyLayer)
+                return rb.gameObject.layer == GameConfig.AllyLayer;
             
             return false;
         }

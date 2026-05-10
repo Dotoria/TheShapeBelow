@@ -1,6 +1,5 @@
-using System.Collections.Generic;
 using Battle;
-using UnityEngine;
+using Util;
 
 namespace Character
 {

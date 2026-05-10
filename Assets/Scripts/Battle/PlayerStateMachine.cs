@@ -6,6 +6,8 @@ namespace Battle
 {
     public class PlayerStateMachine : BattleStateMachineBase
     {
+        private float _lastProjectileTime;
+        private const float PROJECTILE_COOLDOWN = 1.0f;
         private const float INPUT_THRESHOLD = 0.001f;
         
         public PlayerStateMachine(IBattleUnit unit, Movement movement) : base(unit, movement)
@@ -16,6 +18,7 @@ namespace Battle
         {
             if (_movement.IsMoving)
                 _movement.Move(Vector2.zero);
+            TryFireProjectile();
             
             if (InputManager.Delta.sqrMagnitude >= INPUT_THRESHOLD)
             {
@@ -32,6 +35,7 @@ namespace Battle
         protected override void Move()
         {
             _movement.Move(InputManager.Delta);
+            TryFireProjectile();
             
             if (InputManager.Delta.sqrMagnitude < INPUT_THRESHOLD)
             {
@@ -51,7 +55,7 @@ namespace Battle
         protected override void Attack()
         {
             _movement.Move(InputManager.Delta);
-            
+
             _target = _unit.FindTarget();
             if (_target == null || _target.Count == 0 || _target[0].IsDead)
             {
@@ -68,6 +72,16 @@ namespace Battle
                 return;
             }
 
+            TryAttack(target);
+            TryFireProjectile();
+        }
+
+        protected override void Dead()
+        {
+        }
+        
+        private void TryAttack(IBattleUnit target)
+        {
             if (Time.time < _lastAttackTime + _unit.AttackCooldown)
                 return;
 
@@ -76,9 +90,18 @@ namespace Battle
             _unit.Attack();
             target.TakeDamage(_unit.AttackPower);
         }
-
-        protected override void Dead()
+        
+        private void TryFireProjectile()
         {
+            if (Time.time < _lastProjectileTime + PROJECTILE_COOLDOWN)
+                return;
+
+            if (_unit is not Player player)
+                return;
+
+            _lastProjectileTime = Time.time;
+
+            player.FireProjectile();
         }
     }
 }

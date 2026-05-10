@@ -118,6 +118,8 @@ MonoBehaviour:
   _smoothTime: 0.5
   _turnSpeed: 720
   _trigger: {fileID: 1808713793751898591}
+  _attackObjectConfig: {fileID: 11400000, guid: 16b7e9865b801fd44878a55c3b68b4d4, type: 2}
+  _attackObjectType: 0
 --- !u!54 &4761459641799496721
 Rigidbody:
   m_ObjectHideFlags: 0

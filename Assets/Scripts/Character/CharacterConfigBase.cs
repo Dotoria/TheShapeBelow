@@ -21,7 +21,7 @@ namespace Character
             BuildConfigMap();
 
             _poolMap = new Dictionary<TType, ObjectPool<TCharacter>>();
-            _poolRoot = new GameObject($"{typeof(TCharacter).Name}PoolRoot");
+            _poolRoot = new GameObject($"{typeof(TCharacter).Name}Pool");
             
             if (null != parent)
                 _poolRoot.transform.SetParent(parent);

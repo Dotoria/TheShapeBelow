@@ -1,9 +1,14 @@
 using Battle;
+using Battle.AttackObject;
+using Core;
+using UnityEngine;
 
 namespace Character
 {
     public class Player : CharacterBase, IBattleUnit
     {
+        [SerializeField] private EProjectileType _attackObjectType;
+        
         public float MaxHp { get; private set; }
         public float CurrentHp { get; private set; }
         public float MoveSpeed { get; private set; }
@@ -33,8 +38,15 @@ namespace Character
             _stateMachine.ChangeState(BattleStateMachineBase.EBattleUnitState.Idle);
         }
         
+        public void FireProjectile()
+        {
+            var projectile = BattleController.SpawnProjectile(_attackObjectType, Position);
+            projectile.Fire(transform.up, GameConfig.EnemyLayer);
+        }
+
         public void Attack()
         {
+            
         }
         
         public void TakeDamage(float damage)

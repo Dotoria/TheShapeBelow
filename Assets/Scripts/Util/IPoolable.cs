@@ -1,4 +1,4 @@
-namespace Character
+namespace Util
 {
     public interface IPoolable
     {

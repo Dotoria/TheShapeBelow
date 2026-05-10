@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Battle.AttackObject;
 using Character;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace Battle
         [SerializeField] private PlayerConfig _playerConfig;
         [SerializeField] private EnemyConfig _enemyConfig;
         [SerializeField] private FriendConfig _friendConfig;
+        [SerializeField] private ProjectileConfig _projectileConfig;
 
         private readonly List<Enemy> _activeEnemies = new List<Enemy>();
         private readonly List<Friend> _activeFriends = new List<Friend>();
@@ -27,6 +29,7 @@ namespace Battle
             _player.Initialize();
             _enemyConfig.InitializePools(transform);
             _friendConfig.InitializePools(transform);
+            _projectileConfig.InitializePools(transform);
         }
 
         private void OnDestroy()
@@ -65,6 +68,16 @@ namespace Battle
 
             _activeFriends.Add(friend);
             return friend;
+        }
+        
+        public static Projectile SpawnProjectile(EProjectileType projectileType, Vector3 position)
+        {
+            Projectile projectile = _instance._projectileConfig.Spawn(projectileType, position);
+
+            if (null == projectile)
+                return null;
+
+            return projectile;
         }
 
         public void Despawn(Enemy enemy)
