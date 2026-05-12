@@ -41,18 +41,18 @@ Material:
     m_Floats:
     - _Brightness: 1
     - _DownFlowSpeed: 0.13
-    - _MistStrength: 0.35
+    - _MistStrength: 0.2
     - _PlayerFlowStrength: 0.7
     - _Scale: 3
     - _Speed: 0.12
-    - _Strength: 0.5
+    - _Strength: 0.15
     - _VignetteStrength: 0.5
     - _WarpStrength: 0.22
     m_Colors:
-    - _ColorA: {r: 0.02745098, g: 0.06666667, b: 0.11372549, a: 1}
-    - _ColorB: {r: 0.0627451, g: 0.23529412, b: 0.36862746, a: 1}
-    - _ColorC: {r: 0.41568628, g: 0, b: 0.72156864, a: 1}
+    - _ColorA: {r: 0.019607844, g: 0.043137256, b: 0.09411765, a: 1}
+    - _ColorB: {r: 0.105882354, g: 0.18431373, b: 0.3529412, a: 1}
+    - _ColorC: {r: 0.41960785, g: 0.23529412, b: 0.8117647, a: 1}
     - _FlowOffset: {r: 0, g: 0, b: 0, a: 0}
-    - _MistColor: {r: 0.12156863, g: 0.6509804, b: 0.7137255, a: 1}
+    - _MistColor: {r: 0.20784314, g: 0.38039216, b: 0.5411765, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
