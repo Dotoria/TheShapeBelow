@@ -24,7 +24,7 @@ namespace Onboarding
 
         private void Update()
         {
-            if (_start == null || _end == null)
+            if (null == _start || null == _end)
                 return;
 
             Vector3 startPos = _start.position;

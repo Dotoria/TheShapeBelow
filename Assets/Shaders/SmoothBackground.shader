@@ -2,20 +2,23 @@ Shader "Custom/SmoothBackground"
 {
     Properties
     {
-        _ColorA ("Color A", Color) = (0.027, 0.067, 0.114, 1)
-        _ColorB ("Color B", Color) = (0.063, 0.235, 0.369, 1)
-        _ColorC ("Color C", Color) = (0.416, 0.0, 0.722, 1)
+        _ColorA ("Deep Space", Color) = (0.027, 0.067, 0.114, 1)
+        _ColorB ("Deep Sea Blue", Color) = (0.063, 0.235, 0.369, 1)
+        _ColorC ("Violet Energy", Color) = (0.416, 0.0, 0.722, 1)
+        _MistColor ("Aqua Mist", Color) = (0.12, 0.82, 0.90, 1)
 
-        _Speed ("Speed", Float) = 0.25
-        _Scale ("Scale", Float) = 2.0
-        _Strength ("Blend Strength", Range(0, 1)) = 0.65
+        _Speed ("Color Speed", Float) = 0.15
+        _Scale ("Noise Scale", Float) = 3.0
+        _Strength ("Violet Strength", Range(0, 1)) = 0.55
 
-        _DownFlowSpeed ("Down Flow Speed", Float) = 0.08
-        _PlayerFlowStrength ("Player Flow Strength", Float) = 0.15
+        _DownFlowSpeed ("Down Flow Speed", Float) = 0.18
+        _PlayerFlowStrength ("Player Flow Strength", Float) = 0.45
         _FlowOffset ("Flow Offset", Vector) = (0, 0, 0, 0)
 
-        _MistStrength ("Aqua Mist Strength", Range(0, 1)) = 0.25
-        _VignetteStrength ("Vignette Strength", Range(0, 1)) = 0.45
+        _WarpStrength ("Warp Strength", Range(0, 1)) = 0.22
+        _MistStrength ("Mist Strength", Range(0, 1)) = 0.35
+        _VignetteStrength ("Vignette Strength", Range(0, 1)) = 0.5
+        _Brightness ("Brightness", Range(0, 2)) = 1.0
     }
 
     SubShader
@@ -41,6 +44,7 @@ Shader "Custom/SmoothBackground"
             fixed4 _ColorA;
             fixed4 _ColorB;
             fixed4 _ColorC;
+            fixed4 _MistColor;
 
             float _Speed;
             float _Scale;
@@ -50,8 +54,10 @@ Shader "Custom/SmoothBackground"
             float _PlayerFlowStrength;
             float4 _FlowOffset;
 
+            float _WarpStrength;
             float _MistStrength;
             float _VignetteStrength;
+            float _Brightness;
 
             struct appdata
             {
@@ -65,6 +71,50 @@ Shader "Custom/SmoothBackground"
                 float2 uv : TEXCOORD0;
             };
 
+            float hash(float2 p)
+            {
+                return frac(sin(dot(p, float2(127.1, 311.7))) * 43758.5453);
+            }
+
+            float noise(float2 p)
+            {
+                float2 i = floor(p);
+                float2 f = frac(p);
+
+                float a = hash(i);
+                float b = hash(i + float2(1.0, 0.0));
+                float c = hash(i + float2(0.0, 1.0));
+                float d = hash(i + float2(1.0, 1.0));
+
+                float2 u = f * f * (3.0 - 2.0 * f);
+
+                return lerp(a, b, u.x)
+                     + (c - a) * u.y * (1.0 - u.x)
+                     + (d - b) * u.x * u.y;
+            }
+
+            float fbm(float2 p)
+            {
+                float value = 0.0;
+                float amplitude = 0.5;
+
+                value += amplitude * noise(p);
+                p *= 2.02;
+                amplitude *= 0.5;
+
+                value += amplitude * noise(p);
+                p *= 2.03;
+                amplitude *= 0.5;
+
+                value += amplitude * noise(p);
+                p *= 2.01;
+                amplitude *= 0.5;
+
+                value += amplitude * noise(p);
+
+                return value;
+            }
+
             v2f vert(appdata v)
             {
                 v2f o;
@@ -75,38 +125,45 @@ Shader "Custom/SmoothBackground"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                float time = _Time.y * _Speed;
+                float t = _Time.y;
 
-                // 기본적으로 아래로 흐르는 느낌.
-                // UV y를 시간에 따라 올리면 화면상 패턴이 아래로 내려가는 것처럼 보임.
-                float2 flowUv = i.uv;
-                flowUv.y += _Time.y * _DownFlowSpeed;
+                float2 uv = i.uv;
 
-                // 플레이어 이동 반대 방향으로 배경 흐름 추가
-                flowUv += _FlowOffset.xy * _PlayerFlowStrength;
+                float2 flowUv = uv;
+                flowUv.y += t * _DownFlowSpeed;
 
-                float wave1 = sin((flowUv.x * _Scale + time) * 3.14159) * 0.5 + 0.5;
-                float wave2 = sin((flowUv.y * _Scale - time * 0.8) * 3.14159) * 0.5 + 0.5;
-                float wave3 = sin(((flowUv.x + flowUv.y) * _Scale + time * 0.6) * 3.14159) * 0.5 + 0.5;
+                float2 playerFlow = float2(_FlowOffset.x, -_FlowOffset.y);
+                flowUv += playerFlow * _PlayerFlowStrength;
 
-                // 우주 남색 -> 심해 블루 -> 보라 에너지
-                fixed3 colorAB = lerp(_ColorA.rgb, _ColorB.rgb, wave1);
-                fixed3 colorABC = lerp(colorAB, _ColorC.rgb, wave2 * _Strength);
+                float2 warpUv = flowUv * _Scale;
+                float warpX = fbm(warpUv + float2(0.0, t * 0.12));
+                float warpY = fbm(warpUv + float2(8.3, -t * 0.10));
 
-                // 청록 안개 느낌
-                fixed3 aquaMist = fixed3(0.12, 0.82, 0.90);
-                colorABC = lerp(colorABC, colorABC + aquaMist * 0.25, wave3 * _MistStrength);
+                float2 warp = float2(warpX - 0.5, warpY - 0.5) * _WarpStrength;
+                warp += _FlowOffset.xy * 0.25;
 
-                // 중심부는 살짝 밝게, 가장자리는 어둡게
-                float2 center = i.uv - 0.5;
+                float2 finalUv = flowUv + warp;
+
+                float n1 = fbm(finalUv * _Scale + float2(0.0, -t * _Speed));
+                float n2 = fbm(finalUv * (_Scale * 1.8) + float2(4.0, -t * _Speed * 1.4));
+                float n3 = fbm(finalUv * (_Scale * 0.65) + float2(-3.0, -t * _Speed * 0.6));
+
+                fixed3 deepBase = lerp(_ColorA.rgb, _ColorB.rgb, n1);
+                fixed3 violetLayer = lerp(deepBase, _ColorC.rgb, n2 * _Strength);
+
+                fixed3 mist = _MistColor.rgb * n3 * _MistStrength;
+                fixed3 finalColor = violetLayer + mist;
+
+                float verticalDepth = smoothstep(0.0, 1.0, uv.y);
+                finalColor = lerp(finalColor * 0.75, finalColor, verticalDepth);
+
+                float2 center = uv - 0.5;
                 float vignette = 1.0 - saturate(length(center) * 1.35);
-                fixed3 finalColor = colorABC;
                 finalColor *= lerp(1.0 - _VignetteStrength, 1.0, vignette);
 
-                // 아주 약한 심해/우주 광택
-                finalColor += wave3 * 0.035;
+                finalColor *= _Brightness;
 
-                return fixed4(finalColor, 1);
+                return fixed4(finalColor, 1.0);
             }
             ENDCG
         }

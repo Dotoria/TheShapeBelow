@@ -118,7 +118,6 @@ MonoBehaviour:
   _smoothTime: 0.5
   _turnSpeed: 720
   _trigger: {fileID: 1808713793751898591}
-  _attackObjectConfig: {fileID: 11400000, guid: 16b7e9865b801fd44878a55c3b68b4d4, type: 2}
   _attackObjectType: 0
 --- !u!54 &4761459641799496721
 Rigidbody:
@@ -202,7 +201,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  - {fileID: 2100000, guid: 2ef1e4da092af6e4c8f64ec864aee600, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

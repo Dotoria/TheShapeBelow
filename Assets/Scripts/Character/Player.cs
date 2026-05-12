@@ -2,7 +2,6 @@ using Battle;
 using Battle.AttackObject;
 using Core;
 using UnityEngine;
-using Util;
 
 namespace Character
 {

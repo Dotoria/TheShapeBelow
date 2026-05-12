@@ -14,6 +14,7 @@ namespace Character
         
         private const float MOVEMENT_THRESHOLD = 0.001f;
         
+        public Vector2 Velocity => _velocity;
         public bool IsMoving => _velocity.sqrMagnitude > MOVEMENT_THRESHOLD;
 
         public Movement(Transform transform, float moveSpeed, float smoothTime, float turnSpeed)
@@ -52,6 +53,12 @@ namespace Character
                     _turnSpeed * Time.deltaTime
                 );
             }
+        }
+        
+        public void Stop()
+        {
+            _velocity = Vector2.zero;
+            _currentVelocityRef = Vector2.zero;
         }
     }
 }

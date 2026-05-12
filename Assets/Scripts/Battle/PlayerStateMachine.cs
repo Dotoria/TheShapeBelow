@@ -1,4 +1,5 @@
 using Character;
+using Environment;
 using UnityEngine;
 using Util;
 
@@ -16,8 +17,7 @@ namespace Battle
 
         protected override void Idle()
         {
-            if (_movement.IsMoving)
-                _movement.Move(Vector2.zero);
+            TryMove(Vector2.zero);
             TryFireProjectile();
             
             if (InputManager.Delta.sqrMagnitude >= INPUT_THRESHOLD)
@@ -28,13 +28,13 @@ namespace Battle
 
             _target = _unit.FindTarget();
 
-            if (_target != null && _target.Count > 0)
+            if (null != _target && _target.Count > 0)
                 ChangeState(EBattleUnitState.Attack);
         }
 
         protected override void Move()
         {
-            _movement.Move(InputManager.Delta);
+            TryMove(InputManager.Delta);
             TryFireProjectile();
             
             if (InputManager.Delta.sqrMagnitude < INPUT_THRESHOLD)
@@ -44,7 +44,7 @@ namespace Battle
             }
 
             _target = _unit.FindTarget();
-            if (_target != null && _target.Count > 0)
+            if (null != _target && _target.Count > 0)
             {
                 var sqrDistance = (_target[0].Position - _unit.Position).sqrMagnitude;
                 if (sqrDistance <= _unit.AttackRange * _unit.AttackRange)
@@ -54,10 +54,10 @@ namespace Battle
 
         protected override void Attack()
         {
-            _movement.Move(InputManager.Delta);
+            TryMove(InputManager.Delta);
 
             _target = _unit.FindTarget();
-            if (_target == null || _target.Count == 0 || _target[0].IsDead)
+            if (null == _target || _target.Count == 0 || _target[0].IsDead)
             {
                 ChangeState(EBattleUnitState.Idle);
                 return;
@@ -78,6 +78,42 @@ namespace Battle
 
         protected override void Dead()
         {
+            _movement.Stop();
+        }
+
+        private void TryMove(Vector2 input)
+        {
+            bool hasInput = input.sqrMagnitude >= INPUT_THRESHOLD;
+            bool isMoving = _movement.IsMoving;
+
+            if (!hasInput && !isMoving)
+            {
+                _movement.Move(Vector2.zero);
+                MapController.MoveBackgroundStatic(Vector2.zero, false);
+                return;
+            }
+
+            Vector2 inputDirection = hasInput
+                ? input.normalized
+                : Vector2.zero;
+
+            Vector2 allowedDirection = inputDirection;
+            bool isBlockedByBoundary = false;
+
+            if (hasInput)
+            {
+                allowedDirection = MapController.GetAllowedMoveDirection(
+                    _unit.Position,
+                    inputDirection,
+                    out isBlockedByBoundary
+                );
+            }
+
+            _movement.Move(allowedDirection);
+            MapController.MoveBackgroundStatic(
+                inputDirection,
+                isBlockedByBoundary
+            );
         }
         
         private void TryAttack(IBattleUnit target)
