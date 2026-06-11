@@ -1,27 +1,50 @@
-using Battle;
-using Environment;
-using UnityEngine;
+using Character;
 using Onboarding;
 using UI;
+using UnityEngine;
 using Util;
 
 namespace Core
 {
-    public class GameInitializer : MonoBehaviour
+    public class GameInitializer : MonoBinder
     {
         [SerializeField] private CameraController _cameraController;
         [SerializeField] private UIController _uiController;
-        [SerializeField] private BattleController _battleController;
-        [SerializeField] private MapController _mapController;
+        [SerializeField] private GameEventListener[] _gameEventListeners;
         [SerializeField] private Arrow _arrowPrefab;
-
+        
         private void Start()
         {
-            _uiController.Initialize();
-            _battleController.Initialize();
-            _mapController.Initialize();
-            
+            GameEventInvoker.OnEventInvoked += HandleEvent;
             OnboardingManager.Initialize(_arrowPrefab);
+            
+            _uiController.Initialize();
         }
+
+        private void OnDisable()
+        {
+            GameEventInvoker.OnEventInvoked -= HandleEvent;
+        }
+
+        private void HandleEvent(EGameEvent gameEvent)
+        {
+            foreach (var listener in _gameEventListeners)
+            {
+                switch (gameEvent)
+                {
+                    case EGameEvent.Start: listener.InvokeEvent(gameEvent); break;
+                    case EGameEvent.Over: listener.InvokeEvent(gameEvent); break;
+                    case EGameEvent.PhaseStart: listener.InvokeEvent(gameEvent); break;
+                    case EGameEvent.PhaseEnd: listener.InvokeEvent(gameEvent); break;
+                }
+            }
+        }
+
+#if UNITY_EDITOR
+        public override void Bind()
+        {
+            _gameEventListeners = GetComponentsInChildren<GameEventListener>();
+        }
+#endif
     }
 }

@@ -119,6 +119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2927678050874056117}
   - component: {fileID: 2493823412159114002}
+  - component: {fileID: 7261823544727484939}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -160,3 +161,32 @@ MonoBehaviour:
   _flowSmoothTime: 0.5
   _minMoveArea: {x: -2, y: -6}
   _maxMoveArea: {x: 2, y: 6}
+--- !u!114 &7261823544727484939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7236453557360591401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f158af86826842b8abb8e81fc61f5dda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _events:
+  - gameEvent: 0
+    onEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 2493823412159114002}
+          m_TargetAssemblyTypeName: Environment.MapController, Assembly-CSharp
+          m_MethodName: Initialize
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2

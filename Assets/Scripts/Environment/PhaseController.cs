@@ -13,13 +13,36 @@ namespace Environment
         [SerializeField] private Transform[] _friendSpawnPoints;
 
         private int _currentPhase;
+        private bool _isInitialized;
+        
+        public void Initialize()
+        {
+            if (_isInitialized)
+                return;
 
-        public void StartPhase(int phaseIndex)
+            _isInitialized = true;
+            StartPhase(0);
+        }
+        
+        private void Update()
+        {
+            if (!_isInitialized)
+                return;
+            
+            int aliveEnemyCount = BattleController.Enemies.Count;
+
+            if (aliveEnemyCount < _phaseConfig.GetPhase(0).enemies[0].keepCount)
+            {
+                // SpawnEnemy();
+            }
+        }
+
+        private void StartPhase(int phaseIndex)
         {
             _currentPhase = phaseIndex;
 
             PhaseConfig.PhaseData phase = _phaseConfig.GetPhase(phaseIndex);
-            if (phase == null)
+            if (null == phase)
                 return;
 
             SpawnEnemies(phase);
@@ -30,11 +53,11 @@ namespace Environment
         {
             foreach (EnemySpawnData data in phase.enemies)
             {
-                for (int i = 0; i < data.count; i++)
-                {
-                    Vector3 pos = GetRandomPosition(_enemySpawnPoints);
-                    _battleController.SpawnEnemy(data.enemyType, pos);
-                }
+                // for (int i = 0; i < data.count; i++)
+                // {
+                //     Vector3 pos = GetRandomPosition(_enemySpawnPoints);
+                //     _battleController.SpawnEnemy(data.enemyType, pos);
+                // }
             }
         }
 
@@ -42,17 +65,17 @@ namespace Environment
         {
             foreach (FriendSpawnData data in phase.friends)
             {
-                for (int i = 0; i < data.count; i++)
-                {
-                    Vector3 pos = GetRandomPosition(_friendSpawnPoints);
-                    Friend friend = _battleController.SpawnFriend(data.friendType, pos);
-                }
+                // for (int i = 0; i < data.count; i++)
+                // {
+                //     Vector3 pos = GetRandomPosition(_friendSpawnPoints);
+                //     Friend friend = _battleController.SpawnFriend(data.friendType, pos);
+                // }
             }
         }
 
         private Vector3 GetRandomPosition(Transform[] points)
         {
-            if (points == null || points.Length == 0)
+            if (null == points || points.Length == 0)
                 return Vector3.zero;
 
             int index = Random.Range(0, points.Length);

@@ -18,6 +18,12 @@ namespace Battle
 
         protected override void Move()
         {
+            if (null == _target || _target.Count == 0 || _target[0].IsDead)
+            {
+                ChangeState(EBattleUnitState.Idle);
+                return;
+            }
+            
             var direction = _target[0].Position - _unit.Position;
             var sqrDistance = direction.sqrMagnitude;
             
@@ -29,7 +35,7 @@ namespace Battle
 
         protected override void Attack()
         {
-            if (_target == null || _target.Count == 0 || _target[0].IsDead)
+            if (null == _target || _target.Count == 0 || _target[0].IsDead)
             {
                 ChangeState(EBattleUnitState.Idle);
                 return;

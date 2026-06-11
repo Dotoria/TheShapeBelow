@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8079703901912213870}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: StartUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 6828756513730743553}
   - component: {fileID: 1151480337746807545}
   - component: {fileID: 2425619437516428556}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: InnerImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -120,7 +120,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4871393117115118481}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: EndUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,9 +158,10 @@ GameObject:
   - component: {fileID: 3050870916864163888}
   - component: {fileID: 1792650685014755375}
   - component: {fileID: 3931693083341868657}
-  - component: {fileID: 6959547966768265349}
   - component: {fileID: 5183845827561670055}
-  m_Layer: 0
+  - component: {fileID: 6959547966768265349}
+  - component: {fileID: 1001343743099753328}
+  m_Layer: 5
   m_Name: UIManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,21 +244,6 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
---- !u!114 &6959547966768265349
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7540019034088175135}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 164239406b024014b37ac264595c23e0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _startUI: {fileID: 3028118184611877582}
-  _endUI: {fileID: 6791867868639656364}
-  _joystickUI: {fileID: 7774644571951693180}
 --- !u!114 &5183845827561670055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,6 +261,50 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6959547966768265349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7540019034088175135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 164239406b024014b37ac264595c23e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startUI: {fileID: 3028118184611877582}
+  _endUI: {fileID: 6791867868639656364}
+  _joystickUI: {fileID: 7774644571951693180}
+--- !u!114 &1001343743099753328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7540019034088175135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f158af86826842b8abb8e81fc61f5dda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _events:
+  - gameEvent: 0
+    onEvent:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 6959547966768265349}
+          m_TargetAssemblyTypeName: UI.UIController, Assembly-CSharp
+          m_MethodName: StartGame
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &7877826836234579683
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,8 +316,9 @@ GameObject:
   - component: {fileID: 4603237167692350189}
   - component: {fileID: 8426233985462334165}
   - component: {fileID: 913673966213223287}
-  - component: {fileID: 5687548693925848311}
-  m_Layer: 0
+  - component: {fileID: 7191556243109360483}
+  - component: {fileID: 5832157357707781298}
+  m_Layer: 5
   m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -351,7 +382,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5687548693925848311
+--- !u!114 &7191556243109360483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7877826836234579683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe0ea92df76d46dcac438bd9f7f1a332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameEvent: 0
+--- !u!114 &5832157357707781298
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -368,9 +412,9 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 6959547966768265349}
-          m_TargetAssemblyTypeName: UI.UIController, Assembly-CSharp
-          m_MethodName: StartGame
+        - m_Target: {fileID: 7191556243109360483}
+          m_TargetAssemblyTypeName: Core.GameEventInvoker, Assembly-CSharp
+          m_MethodName: InvokeEvent
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -391,7 +435,7 @@ GameObject:
   - component: {fileID: 5264184871170040311}
   - component: {fileID: 4674335987560546903}
   - component: {fileID: 3278293043938219913}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: OuterImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -466,7 +510,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8101556231305063858}
   - component: {fileID: 7774644571951693180}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: JoystickUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}

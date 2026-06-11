@@ -8,6 +8,11 @@ namespace Battle
 {
     public class BattleController : MonoBehaviour
     {
+        private static BattleController _instance;
+        public static IBattleUnit Player => _instance._player;
+        public static IReadOnlyList<Enemy> Enemies => _instance._activeEnemies;
+        public static IReadOnlyList<Friend> Friends => _instance._activeFriends;
+        
         [SerializeField] private Player _player;
         [Header("Config")]
         [SerializeField] private PlayerConfig _playerConfig;
@@ -18,14 +23,11 @@ namespace Battle
         private readonly List<Enemy> _activeEnemies = new List<Enemy>();
         private readonly List<Friend> _activeFriends = new List<Friend>();
 
-        private static BattleController _instance;
-        public static IBattleUnit Player => _instance._player;
-        public static IReadOnlyList<Enemy> Enemies => _instance._activeEnemies;
-        public static IReadOnlyList<Friend> Friends => _instance._activeFriends;
-
         public void Initialize()
         {
-            _instance = this;
+            if (null == _instance)
+                _instance = this;
+            
             _player.ApplyConfig(_playerConfig);
             _player.Initialize();
             _enemyConfig.InitializePools(transform);
@@ -45,6 +47,11 @@ namespace Battle
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 SpawnEnemy(Enemy.EEnemyType.Default, Vector3.zero);
+            }
+
+            if (Input.GetKeyDown(KeyCode.BackQuote))
+            {
+                SpawnFriend(Friend.EFriendType.Default, Vector3.zero);
             }
 
             if (Input.GetKeyDown(KeyCode.A))
@@ -92,7 +99,7 @@ namespace Battle
 
         public void Despawn(Enemy enemy)
         {
-            if (enemy == null)
+            if (null == enemy)
                 return;
 
             _activeEnemies.Remove(enemy);
@@ -101,7 +108,7 @@ namespace Battle
 
         public void Despawn(Friend friend)
         {
-            if (friend == null)
+            if (null == friend)
                 return;
 
             _activeFriends.Remove(friend);

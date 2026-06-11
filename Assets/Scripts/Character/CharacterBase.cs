@@ -8,6 +8,9 @@ namespace Character
 {
     public abstract class CharacterBase : MonoBehaviour
     {
+        [SerializeField] private MeshFilter _meshFilter;
+        
+        [Header("Settings")]
         [SerializeField] private float _moveSpeed = 5f;
         [SerializeField] private float _smoothTime = 0.5f;
         [SerializeField] private float _turnSpeed = 720f;
@@ -26,6 +29,7 @@ namespace Character
             
             _initialized = true;
             _movement = new Movement(transform, _moveSpeed, _smoothTime, _turnSpeed);
+            ShapeGenerator.GenerateShape(_meshFilter);
             
             _trigger.Activate();
             _trigger.OnTriggerEntered += OnEntered;

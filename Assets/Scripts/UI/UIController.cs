@@ -18,9 +18,8 @@ namespace UI
 
         public void StartGame()
         {
-            Debug.Log("Start Game");
-            _startUI.SetActive(false);
             InputManager.BlockInput(false);
+            _startUI.SetActive(false);
         }
     }
 }

@@ -1,4 +1,4 @@
-Shader "Custom/SpriteAdditiveGlow"
+Shader "Custom/GlowSprite"
 {
     Properties
     {
@@ -24,7 +24,6 @@ Shader "Custom/SpriteAdditiveGlow"
         Lighting Off
         ZWrite Off
 
-        // Additive glow
         Blend SrcAlpha One
 
         Pass
