@@ -1,4 +1,5 @@
 using Battle;
+using UnityEngine;
 using Util;
 
 namespace Character
@@ -32,6 +33,7 @@ namespace Character
             AttackPower = config.attackPower;
             AttackRange = config.attackRange;
             AttackCooldown = config.attackCooldown;
+            SetColor(config.color);
         }
 
         protected override void SetDefaultValues()

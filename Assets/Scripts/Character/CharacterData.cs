@@ -11,6 +11,7 @@ namespace Character
         [Header("Identity")]
         public TType characterType;
         public TCharacter prefab;
+        public Color color = Color.white;
 
         [Header("Stats")]
         public float maxHp = 10f;

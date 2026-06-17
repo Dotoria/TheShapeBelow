@@ -9,6 +9,7 @@ namespace Character
     public abstract class CharacterBase : MonoBehaviour
     {
         [SerializeField] private MeshFilter _meshFilter;
+        [SerializeField] private MeshRenderer _meshRenderer;
         
         [Header("Settings")]
         [SerializeField] private float _moveSpeed = 5f;
@@ -19,8 +20,13 @@ namespace Character
         private bool _initialized = false;
         
         protected Movement _movement;
+        private MaterialPropertyBlock _propertyBlock;
         private List<IBattleUnit> _targetsInRange = new List<IBattleUnit>();
         public Vector3 Position => transform.position;
+        
+        private const string COLOR_PROPERTY = "_MainColor";
+        private const string CORRUPTION_PROPERTY = "_Corruption";
+        private const float COLOR_OFFSET = 0.25f;
 
         public void Initialize()
         {
@@ -29,6 +35,7 @@ namespace Character
             
             _initialized = true;
             _movement = new Movement(transform, _moveSpeed, _smoothTime, _turnSpeed);
+            _propertyBlock = new MaterialPropertyBlock();
             ShapeGenerator.GenerateShape(_meshFilter);
             
             _trigger.Activate();
@@ -88,6 +95,27 @@ namespace Character
             });
 
             return _targetsInRange;
+        }
+
+        protected void SetColor(Color color)
+        {
+            Color randomColor = new Color(
+                Mathf.Clamp01(color.r + Random.Range(-COLOR_OFFSET, COLOR_OFFSET)),
+                Mathf.Clamp01(color.g + Random.Range(-COLOR_OFFSET, COLOR_OFFSET)),
+                Mathf.Clamp01(color.b + Random.Range(-COLOR_OFFSET, COLOR_OFFSET)),
+                color.a
+            );
+
+            _meshRenderer.GetPropertyBlock(_propertyBlock);
+            _propertyBlock.SetColor(COLOR_PROPERTY, randomColor);
+            _meshRenderer.SetPropertyBlock(_propertyBlock);
+        }
+        
+        protected void SetCorruption(float value)
+        {
+            _meshRenderer.GetPropertyBlock(_propertyBlock);
+            _propertyBlock.SetFloat(CORRUPTION_PROPERTY, value);
+            _meshRenderer.SetPropertyBlock(_propertyBlock);
         }
     }
 }

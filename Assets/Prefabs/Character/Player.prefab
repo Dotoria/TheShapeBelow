@@ -115,6 +115,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _meshFilter: {fileID: 8063634972842644110}
+  _meshRenderer: {fileID: 3483332788452403857}
   _moveSpeed: 5
   _smoothTime: 0.5
   _turnSpeed: 720
@@ -212,7 +213,6 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 2ef1e4da092af6e4c8f64ec864aee600, type: 2}
-  - {fileID: 2100000, guid: fe1f7d227b83d214b9bc2ac19a977dbf, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

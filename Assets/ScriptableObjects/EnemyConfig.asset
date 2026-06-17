@@ -15,6 +15,7 @@ MonoBehaviour:
   _entries:
   - characterType: 0
     prefab: {fileID: 4072333694391165365, guid: a642c1a6d37a8f842af2ec916bad040d, type: 3}
+    color: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 0}
     maxHp: 1
     moveSpeed: 1
     attackPower: 1

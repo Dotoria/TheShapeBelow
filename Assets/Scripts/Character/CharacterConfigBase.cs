@@ -54,14 +54,10 @@ namespace Character
         public TCharacter Spawn(TType characterType, Vector3 position)
         {
             if (null == _poolMap)
-            {
                 return null;
-            }
 
             if (!_poolMap.TryGetValue(characterType, out ObjectPool<TCharacter> pool))
-            {
                 return null;
-            }
 
             CharacterData<TCharacter, TType> config = Get(characterType);
             if (null == config)
@@ -70,10 +66,10 @@ namespace Character
             TCharacter character = pool.Get();
             character.transform.position = position;
 
-            ApplyConfig(character, config);
             if (character is IPoolable poolable)
                 poolable.OnSpawned();
             
+            ApplyConfig(character, config);
             return character;
         }
 
@@ -135,9 +131,6 @@ namespace Character
             }
         }
 
-        protected abstract void ApplyConfig(
-            TCharacter character,
-            CharacterData<TCharacter, TType> config
-        );
+        protected abstract void ApplyConfig(TCharacter character, CharacterData<TCharacter, TType> config);
     }
 }
